@@ -40,8 +40,11 @@ When you run it, he'll enter in the *User interactor mode*.
 
 COMMANDS:
 help - help to the user
+
 create - used to create a probe that wll be used by the script to determine if the application changed the js file
+
 delete - delete an probe
+
 clear - used to clean the terminal
 
 # CREATING A PROBE:
@@ -64,23 +67,38 @@ If you put 'n' or 'N', you'll not configure the email.
 But, if you put 'y' or 'Y', you'll need to answer some questions
 
 FROM >>  - from the X email. 
+
 TO >>    - To the X email.
+
 API KEY >> - The Key to send emails. You can create your here: https://myaccount.google.com/u/2/apppasswords
 
 
 EX:
+
 Welcome!
+
 Starting interation with user
+
   >>  create
+
 Name of the probe >> MY_PROBE
+
 Location of the file  >>  /home/user/Documents/urls
+
 FOUND!
+
 generating a copy
+
 OK!
+
 Want to configure email sendings? Y/n >> y
+
 FROM >> myemail@gmail.com
+
 TO >> mysecondemail@gmail.com
+
 API KEY >> xxxxxxxxxxx
+
 DONE!
 
 # DELETING A PROBE:
@@ -92,9 +110,13 @@ To delete a probe, you need to be in the user interactor mode, and put the comma
 After that, put the name of the Probe
 
 EX:
+
 Welcome!
+
 Starting interation with user
+
   >>  delete
+
 Name of the probe  >>  MY_PROBE
 
 
