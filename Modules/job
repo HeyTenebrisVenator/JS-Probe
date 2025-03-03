@@ -1,0 +1,13 @@
+[Unit]
+Description=JS Probe
+After=graphical.target
+Requires=graphical.target
+
+[Service]
+User=YOUR USER HERE
+ExecStart=/usr/bin/python3 /usr/bin/probe_for_js
+Restart=on-failure
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=graphical.target

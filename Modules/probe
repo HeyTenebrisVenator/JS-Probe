@@ -1,0 +1,72 @@
+import requests
+import os
+from notifypy import Notify
+import smtplib
+import email.message
+import time
+home_dir = os.path.expanduser("~")
+print('checking existence of the ~/.JS_PROBE')
+notification = Notify()
+notification.title = "Starting Probe"
+notification.message = "Trying to send notifications"
+notification.send()
+try:
+    locations = os.listdir(home_dir + '/.JS_PROBE')
+except:
+    print('ERROR')
+    quit()
+home_dir = home_dir + '/.JS_PROBE'
+while True:
+    for local in locations:
+        directory = home_dir + '/' + local
+        try:
+            local = open(directory + '/JS_URLS', 'r').readlines()
+        except:
+            print('ERROR DETECTED, SKIPPING')
+            pass
+        for url in local:
+            time.sleep(3)
+            url = url.replace('\n', '')
+            try:
+                text = len(requests.get(url).text)
+                url_with_mod = url.replace('https://', '').replace('http://', '').replace('/', '_')
+                data = open(directory + '/' + url_with_mod, 'r').read()
+                if data != str(text):
+                     #send email
+                    body = f"""FILE MODIFIED
+The probe detected that the script at {url} has been modified
+this email was automatically sent
+DO NOT ANSWER IT
+"""
+                    try:
+                        msg = email.message.Message()
+                        msg['Subject'] = "MODIFICATION DETECTED"
+                        msg['From'] = open(directory + '/from', 'r').read()
+                        msg['To'] = open(directory + '/to', 'r').read()
+                        api_key = open(directory + '/api', 'r').read()
+                        msg.set_payload(body)
+                        s = smtplib.SMTP('smtp.gmail.com: 587')
+                        s.starttls()
+                        s.login(msg['From'], api_key)
+                        s.sendmail(msg['From'], msg['To'], msg.as_string().encode('utf-8'))
+                    except:
+                        print("Couldn't send the email")
+                        notification = Notify()
+                        notification.title = "ERROR SENDING EMAIL"
+                        notification.message = "Error sending the email"
+                        notification.send()                 
+                    print('MODIFICATION DETECTED AT ' + url)
+                    #send notification
+                    notification = Notify()
+                    notification.title = "MODIFICATION DETECTED!"
+                    notification.message = "Modification at " + url
+                    notification.send()
+                    open(directory + '/report', 'a').write('\n modification found in ' + url)
+                else:
+                    print('pass')
+            except:
+                print('erro')
+            try:
+                open(directory + '/' + url_with_mod, 'w').write(str(text))
+            except:
+                pass

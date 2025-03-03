@@ -1,0 +1,3 @@
+notify-py
+secure-smtplib
+email

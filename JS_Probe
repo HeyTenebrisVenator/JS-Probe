@@ -1,0 +1,73 @@
+#!/usr/bin/python3
+import os
+from notifypy import Notify
+
+
+
+print('Welcome!\nStarting interation with user')
+
+help = """"""
+home_dir = os.path.expanduser("~")
+
+try:
+    os.mkdir(home_dir + '/.JS_PROBE')
+    print(f'Directory Generated at {home_dir}/.JS_PROBE')
+except FileExistsError:
+    pass
+location = f'{home_dir}/.JS_PROBE'
+
+def create(location):
+    cont = True
+    name = input('Name of the probe  >>  ')
+    try:
+        os.mkdir(location + '/' + name)
+        location = location + '/' + name
+    except FileExistsError:
+        print('There is an probe with that name, try another one')
+        cont = False
+    if cont == True:
+        local_file = input('Location of the file  >>  ')
+        try:
+            file_with_js =  open(local_file, 'r').read()
+            print('FOUND!\ngenerating a copy')
+            open(location + '/JS_URLS', 'w').write(file_with_js)
+            print('OK!')
+        except:
+            print('ERROR!')
+            cont = False
+    if cont == True:
+        if input('Want to configure email sendings? Y/n  >>  ').lower() == 'y':
+            from_email = input('FROM  >>  ')
+            open(location + '/from', 'w').write(from_email)
+            to = input('TO  >>  ')
+            open(location + '/to', 'w').write(to)
+            api = input('API KEY  >>  ')
+            open(location + '/api', 'w').write(api)
+            print('DONE!')
+
+def delete(location):
+    location_to_delete = input('Name of the probe  >> ')
+    try:
+        os.system('sudo rm -r ' + location + '/' + location_to_delete)
+    except FileNotFoundError:
+        print('ERROR. File not found')
+
+#interaction
+def interaction():
+    while True:
+        command = input('  >>  ')
+        if command == 'help':
+            print('help - help to the user\ncreate - used to create a probe, that wll be used by the script to determine if the application changed the js files\ndelete - delete an probe\nclear - used to clean the terminal')
+        elif command == 'create':
+            create(location)
+        elif command == 'delete':
+            delete(location)
+        elif command == 'clear':
+            os.system('clear')
+        elif command == 'start probe':
+            print('start probe')
+        else:
+            print('Command not found')
+
+
+interaction()
