@@ -64,8 +64,6 @@ def interaction():
             delete(location)
         elif command == 'clear':
             os.system('clear')
-        elif command == 'start probe':
-            print('start probe')
         else:
             print('Command not found')
 
